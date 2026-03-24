@@ -26,7 +26,7 @@ dependencies {
 }
 
 shadowJar {
-    archiveClassifier.set('shadow');
+    archiveClassifier.set('shadow')
 
     dependencies {
         exclude(dependency('org.jetbrains:annotations'))

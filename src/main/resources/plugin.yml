@@ -1,0 +1,6 @@
+name: SurvivalAlpha
+version: ${version}
+main: com.akira.survivalalpha.SurvivalAlpha
+authors: [Yukino_Akira]
+api-version: 1.20
+depend: [AkiraCore]

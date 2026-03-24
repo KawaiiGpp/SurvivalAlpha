@@ -1,0 +1,28 @@
+package com.akira.survivalalpha.service.damage
+
+import org.bukkit.event.entity.EntityDamageEvent
+
+/**
+ * 伤害修饰符
+ *
+ * 明确对于监听到的 [EntityDamageEvent] 的修饰行为。
+ *
+ * @property name 修饰符名称，不可为空。不可重复，否则有覆盖风险
+ * @property priority 优先级，数字越小优先级越高，不可小于零
+ */
+abstract class DamageModifier(val name: String, val priority: Int) {
+    init {
+        require(priority >= 0) { "Priority of Damage Modifier must be >= 0." }
+        require(name.isNotEmpty()) { "Name of Damage Modifier cannot be empty." }
+    }
+
+    /**
+     * 定义对事件的修饰行为。
+     *
+     * 由 [DamageManager.applyModifiers] 统一调度，
+     * 无需手动调用该方法。
+     *
+     * @param event 事件实例
+     */
+    abstract fun modify(event: EntityDamageEvent)
+}
