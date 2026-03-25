@@ -23,6 +23,6 @@ class SurvivalAlpha : AkiraPlugin() {
     }
 
     private fun setupDamageModifiers() {
-        DamageManager.register(DistanceScaling(75))
+        DamageManager.register(DistanceScaling(0))
     }
 }
