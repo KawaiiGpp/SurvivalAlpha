@@ -12,6 +12,8 @@ import org.bukkit.event.entity.EntityDamageEvent
  * 距离伤害修饰符
  *
  * 距离出生点越远，受到攻击的伤害就越高。
+ *
+ * @property scaling 每距100米的增伤百分比
  */
 class DistanceScaling(priority: Int) : DamageModifier("distance_scaling", priority) {
     private val scaling = 75
