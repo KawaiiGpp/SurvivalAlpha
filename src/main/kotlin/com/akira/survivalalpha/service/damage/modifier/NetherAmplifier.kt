@@ -1,9 +1,8 @@
 package com.akira.survivalalpha.service.damage.modifier
 
-import com.akira.core.api.util.entity.getFinalMaxHealth
+import com.akira.core.api.util.general.enableTrueDamage
 import com.akira.survivalalpha.service.damage.DamageModifier
 import org.bukkit.World.Environment
-import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause
 
@@ -26,23 +25,11 @@ class NetherAmplifier(priority: Int) : DamageModifier("nether_amplifier", priori
 
     override fun modify(event: EntityDamageEvent) {
         if (event.entity.world.environment != Environment.NETHER) return
-
-        val player = event.entity as? Player ?: return
         val cause = event.cause
 
         if (cause == DamageCause.LAVA || cause == DamageCause.FIRE) {
-            val multiplier = if (cause == DamageCause.LAVA) lavaMultiplier else fireMultiplier
-            val damage = event.damage * multiplier
-
-            val maxHealth = player.getFinalMaxHealth()
-            if (player.health > maxHealth) player.health = maxHealth
-
-            if (damage < player.health) {
-                event.damage = 0.0
-                player.health -= damage
-            } else {
-                event.damage = Long.MAX_VALUE.toDouble()
-            }
+            event.damage *= if (cause == DamageCause.LAVA) lavaMultiplier else fireMultiplier
+            event.enableTrueDamage()
         }
 
         if (cause == DamageCause.FIRE_TICK) event.damage *= fireTickMultiplier
