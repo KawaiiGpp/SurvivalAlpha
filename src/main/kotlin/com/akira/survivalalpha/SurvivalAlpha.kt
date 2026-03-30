@@ -2,6 +2,7 @@ package com.akira.survivalalpha
 
 import com.akira.core.api.AkiraPlugin
 import com.akira.survivalalpha.listener.DamageListener
+import com.akira.survivalalpha.listener.PlayerDefaultSettingHandler
 import com.akira.survivalalpha.service.damage.DamageManager
 import com.akira.survivalalpha.service.damage.modifier.DistanceScaling
 import com.akira.survivalalpha.service.damage.modifier.NetherAmplifier
@@ -21,7 +22,9 @@ class SurvivalAlpha : AkiraPlugin() {
         super.onEnable()
 
         setupDamageModifiers()
+
         setupListener(DamageListener())
+        setupListener(PlayerDefaultSettingHandler())
     }
 
     private fun setupDamageModifiers() {

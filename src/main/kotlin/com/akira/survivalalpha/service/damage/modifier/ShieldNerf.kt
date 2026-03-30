@@ -30,9 +30,8 @@ class ShieldNerf(priority: Int) : DamageModifier("shield_nerf", priority) {
 
     override fun modify(event: EntityDamageEvent) {
         if (event !is EntityDamageByEntityEvent) return
-        val player = event.entity as? Player ?: return
 
-        player.shieldBlockingDelay = Int.MAX_VALUE
+        val player = event.entity as? Player ?: return
         if (!player.isShieldRaised) return
 
         val item = player.activeItem
