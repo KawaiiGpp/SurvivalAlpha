@@ -1,6 +1,9 @@
 package com.akira.survivalalpha.service.damage
 
 import com.akira.core.api.EnhancedManager
+import com.akira.survivalalpha.SurvivalAlpha
+import com.akira.survivalalpha.service.damage.DamageManager.applyModifiers
+import com.akira.survivalalpha.service.damage.DamageManager.sorted
 import org.bukkit.event.entity.EntityDamageEvent
 
 /**
@@ -22,7 +25,15 @@ object DamageManager : EnhancedManager<DamageModifier>() {
      * @param event 事件实例
      */
     fun applyModifiers(event: EntityDamageEvent) {
-        sorted.forEach { it.modify(event) }
+        sorted.forEach { modifier ->
+            runCatching { modifier.modify(event) }
+                .onFailure { throwable ->
+                    val plugin = SurvivalAlpha.instance
+
+                    plugin.logError("处理伤害修饰符 ${modifier.name} 发生异常。")
+                    throwable.printStackTrace()
+                }
+        }
     }
 
     override fun register(element: DamageModifier) {
