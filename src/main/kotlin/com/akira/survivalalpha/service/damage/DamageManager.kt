@@ -26,10 +26,10 @@ object DamageManager : EnhancedManager<DamageModifier>() {
      */
     fun applyModifiers(event: EntityDamageEvent) {
         val plugin = SurvivalAlpha.instance
-        val mark = DamageMark()
+        val flag = DamageFlag()
 
         sorted.forEach { modifier ->
-            runCatching { modifier.modify(event, mark) }
+            runCatching { modifier.modify(event, flag) }
                 .onFailure { throwable ->
                     plugin.logError("处理伤害修饰符 ${modifier.name} 发生异常。")
                     throwable.printStackTrace()

@@ -1,5 +1,5 @@
 package com.akira.survivalalpha.service.damage
 
-class DamageMark {
+class DamageFlag {
     var isTrueDamage = false
 }

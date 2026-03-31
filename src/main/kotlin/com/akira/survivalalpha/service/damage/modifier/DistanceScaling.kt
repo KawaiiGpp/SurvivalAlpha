@@ -1,6 +1,6 @@
 package com.akira.survivalalpha.service.damage.modifier
 
-import com.akira.survivalalpha.service.damage.DamageMark
+import com.akira.survivalalpha.service.damage.DamageFlag
 import com.akira.survivalalpha.service.damage.DamageModifier
 import org.bukkit.World.Environment
 import org.bukkit.entity.LivingEntity
@@ -19,7 +19,7 @@ import org.bukkit.event.entity.EntityDamageEvent
 class DistanceScaling(priority: Int) : DamageModifier("distance_scaling", priority) {
     private val scaling = 50
 
-    override fun modify(event: EntityDamageEvent, mark: DamageMark) {
+    override fun modify(event: EntityDamageEvent, flag: DamageFlag) {
         val victim = event.entity
 
         if (victim !is Player) return

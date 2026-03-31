@@ -1,6 +1,6 @@
 package com.akira.survivalalpha.service.damage.modifier
 
-import com.akira.survivalalpha.service.damage.DamageMark
+import com.akira.survivalalpha.service.damage.DamageFlag
 import com.akira.survivalalpha.service.damage.DamageModifier
 import org.bukkit.World.Environment
 import org.bukkit.event.entity.EntityDamageEvent
@@ -23,13 +23,13 @@ class NetherAmplifier(priority: Int) : DamageModifier("nether_amplifier", priori
     private val fireMultiplier = 3.0
     private val fireTickMultiplier = 3.0
 
-    override fun modify(event: EntityDamageEvent, mark: DamageMark) {
+    override fun modify(event: EntityDamageEvent, flag: DamageFlag) {
         if (event.entity.world.environment != Environment.NETHER) return
         val cause = event.cause
 
         if (cause == DamageCause.LAVA || cause == DamageCause.FIRE) {
             event.damage *= if (cause == DamageCause.LAVA) lavaMultiplier else fireMultiplier
-            mark.isTrueDamage = true
+            flag.isTrueDamage = true
         }
 
         if (cause == DamageCause.FIRE_TICK) event.damage *= fireTickMultiplier

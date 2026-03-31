@@ -2,7 +2,7 @@ package com.akira.survivalalpha.service.damage.modifier
 
 import com.akira.core.api.util.entity.isShieldRaised
 import com.akira.core.api.util.world.SoundPack
-import com.akira.survivalalpha.service.damage.DamageMark
+import com.akira.survivalalpha.service.damage.DamageFlag
 import com.akira.survivalalpha.service.damage.DamageModifier
 import org.bukkit.Sound
 import org.bukkit.Tag
@@ -29,7 +29,7 @@ class ShieldNerf(priority: Int) : DamageModifier("shield_nerf", priority) {
     private val axeDamageMultiplier = 5.0
     private val damageAfterBlockingMultiplier = 0.5
 
-    override fun modify(event: EntityDamageEvent, mark: DamageMark) {
+    override fun modify(event: EntityDamageEvent, flag: DamageFlag) {
         if (event !is EntityDamageByEntityEvent) return
 
         val player = event.entity as? Player ?: return
