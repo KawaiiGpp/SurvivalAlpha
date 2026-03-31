@@ -25,11 +25,12 @@ object DamageManager : EnhancedManager<DamageModifier>() {
      * @param event 事件实例
      */
     fun applyModifiers(event: EntityDamageEvent) {
-        sorted.forEach { modifier ->
-            runCatching { modifier.modify(event) }
-                .onFailure { throwable ->
-                    val plugin = SurvivalAlpha.instance
+        val plugin = SurvivalAlpha.instance
+        val mark = DamageMark()
 
+        sorted.forEach { modifier ->
+            runCatching { modifier.modify(event, mark) }
+                .onFailure { throwable ->
                     plugin.logError("处理伤害修饰符 ${modifier.name} 发生异常。")
                     throwable.printStackTrace()
                 }

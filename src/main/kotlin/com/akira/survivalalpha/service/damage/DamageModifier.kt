@@ -23,6 +23,7 @@ abstract class DamageModifier(val name: String, val priority: Int) {
      * 无需手动调用该方法。
      *
      * @param event 事件实例
+     * @param mark 伤害事件标记
      */
-    abstract fun modify(event: EntityDamageEvent)
+    abstract fun modify(event: EntityDamageEvent, mark: DamageMark)
 }
