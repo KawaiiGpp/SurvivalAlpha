@@ -9,7 +9,7 @@ import org.bukkit.event.entity.EntityDamageEvent
 class DamageListener : Listener {
     @EventHandler
     fun onDamage(event: EntityDamageEvent) {
-        event.enableTrueDamage()
         DamageManager.applyModifiers(event)
+        event.enableTrueDamage()
     }
 }
