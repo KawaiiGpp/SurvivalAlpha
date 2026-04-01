@@ -10,9 +10,8 @@ import org.bukkit.event.entity.EntityDamageEvent
  * @property name 修饰符名称，不可为空。不可重复，否则有覆盖风险
  * @property priority 优先级，数字越小优先级越高，不可小于零
  */
-abstract class DamageModifier(val name: String, val priority: Int) {
+abstract class DamageModifier(val name: String, val priority: DamagePriority) {
     init {
-        require(priority >= 0) { "Priority of Damage Modifier must be >= 0." }
         require(name.isNotEmpty()) { "Name of Damage Modifier cannot be empty." }
     }
 
@@ -20,7 +19,7 @@ abstract class DamageModifier(val name: String, val priority: Int) {
      * 定义对事件的修饰行为。
      *
      * 由 [DamageManager.applyModifiers] 统一调度，
-     * 无需手动调用该方法。
+     * 无需另外手动调用该方法。
      *
      * @param event 事件实例
      * @param flag 伤害事件标记，用于记录额外信息

@@ -4,6 +4,7 @@ import com.akira.core.api.util.entity.isShieldRaised
 import com.akira.core.api.util.world.SoundPack
 import com.akira.survivalalpha.service.damage.DamageFlag
 import com.akira.survivalalpha.service.damage.DamageModifier
+import com.akira.survivalalpha.service.damage.DamagePriority
 import org.bukkit.Sound
 import org.bukkit.Tag
 import org.bukkit.entity.LivingEntity
@@ -24,7 +25,7 @@ import kotlin.math.roundToInt
  * @property axeDamageMultiplier 斧头攻击扣除的耐久度倍数
  * @property damageAfterBlockingMultiplier 盾牌格挡后剩余的伤害比例
  */
-class ShieldNerf(priority: Int) : DamageModifier("shield_nerf", priority) {
+class ShieldNerf(priority: DamagePriority) : DamageModifier("shield_nerf", priority) {
     private val defaultDamageMultiplier = 2.0
     private val axeDamageMultiplier = 5.0
     private val damageAfterBlockingMultiplier = 0.5

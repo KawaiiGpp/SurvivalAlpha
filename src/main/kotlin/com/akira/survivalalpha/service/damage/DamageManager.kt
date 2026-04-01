@@ -4,6 +4,9 @@ import com.akira.core.api.EnhancedManager
 import com.akira.survivalalpha.SurvivalAlpha
 import com.akira.survivalalpha.service.damage.DamageManager.applyModifiers
 import com.akira.survivalalpha.service.damage.DamageManager.sorted
+import com.akira.survivalalpha.service.damage.modifier.DistanceScaling
+import com.akira.survivalalpha.service.damage.modifier.NetherAmplifier
+import com.akira.survivalalpha.service.damage.modifier.ShieldNerf
 import org.bukkit.event.entity.EntityDamageEvent
 
 /**
@@ -32,9 +35,19 @@ object DamageManager : EnhancedManager<DamageModifier>() {
             runCatching { modifier.modify(event, flag) }
                 .onFailure { throwable ->
                     plugin.logError("处理伤害修饰符 ${modifier.name} 发生异常。")
+                    plugin.logError("该修饰符的优先级属于：${modifier.priority.name}")
                     throwable.printStackTrace()
                 }
         }
+    }
+
+    /**
+     * 注册所有伤害修饰符。
+     */
+    fun setupModifiers() {
+        register(DistanceScaling(DamagePriority.ADD_HIGH))
+        register(NetherAmplifier(DamagePriority.ADD_LOW))
+        register(ShieldNerf(DamagePriority.DEFENSE_HIGH))
     }
 
     override fun register(element: DamageModifier) {

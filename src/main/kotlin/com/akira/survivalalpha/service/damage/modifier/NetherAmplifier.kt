@@ -2,6 +2,7 @@ package com.akira.survivalalpha.service.damage.modifier
 
 import com.akira.survivalalpha.service.damage.DamageFlag
 import com.akira.survivalalpha.service.damage.DamageModifier
+import com.akira.survivalalpha.service.damage.DamagePriority
 import org.bukkit.World.Environment
 import org.bukkit.event.entity.EntityDamageEvent
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause
@@ -18,7 +19,7 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageCause
  * @property fireMultiplier 火焰直接伤害的倍乘值
  * @property fireTickMultiplier 火焰持续伤害的倍乘值
  */
-class NetherAmplifier(priority: Int) : DamageModifier("nether_amplifier", priority) {
+class NetherAmplifier(priority: DamagePriority) : DamageModifier("nether_amplifier", priority) {
     private val lavaMultiplier = 1.5
     private val fireMultiplier = 3.0
     private val fireTickMultiplier = 3.0
