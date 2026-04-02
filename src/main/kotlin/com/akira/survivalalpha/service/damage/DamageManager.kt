@@ -32,6 +32,8 @@ object DamageManager : EnhancedManager<DamageModifier>() {
         val flag = DamageFlag()
 
         sorted.forEach { modifier ->
+            if (event.isCancelled && modifier.ignoreCancelled) return@forEach
+
             runCatching { modifier.modify(event, flag) }
                 .onFailure { throwable ->
                     plugin.logError("处理伤害修饰符 ${modifier.name} 发生异常。")
