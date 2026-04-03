@@ -4,6 +4,7 @@ import com.akira.core.api.EnhancedManager
 import com.akira.survivalalpha.SurvivalAlpha
 import com.akira.survivalalpha.service.damage.DamageManager.applyModifiers
 import com.akira.survivalalpha.service.damage.DamageManager.sorted
+import com.akira.survivalalpha.service.damage.modifier.ArmorReduction
 import com.akira.survivalalpha.service.damage.modifier.DistanceScaling
 import com.akira.survivalalpha.service.damage.modifier.NetherAmplifier
 import com.akira.survivalalpha.service.damage.modifier.ShieldNerf
@@ -49,7 +50,8 @@ object DamageManager : EnhancedManager<DamageModifier>() {
     fun setupModifiers() {
         register(DistanceScaling(DamagePriority.ADD_HIGH))
         register(NetherAmplifier(DamagePriority.ADD_LOW))
-        register(ShieldNerf(DamagePriority.DEFENSE_HIGH))
+        register(ShieldNerf(DamagePriority.HIGHEST))
+        register(ArmorReduction(DamagePriority.HIGHEST))
     }
 
     override fun register(element: DamageModifier) {
