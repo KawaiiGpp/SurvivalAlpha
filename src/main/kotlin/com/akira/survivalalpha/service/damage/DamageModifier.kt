@@ -10,6 +10,7 @@ import org.bukkit.event.entity.EntityDamageEvent
  * @property name 修饰符名称，不可为空。不可重复，否则有覆盖风险
  * @property priority 优先级，数字越小优先级越高，不可小于零
  * @property ignoreCancelled 如果事件实例标记为已取消，则不应用修饰符
+ * @property ignoreIfTrueDamage 如果事件标记为真实伤害，则不应用修饰符
  */
 abstract class DamageModifier(
     val name: String,
