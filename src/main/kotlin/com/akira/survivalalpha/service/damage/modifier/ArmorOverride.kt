@@ -8,10 +8,11 @@ import org.bukkit.attribute.Attributable
 import org.bukkit.attribute.Attribute
 import org.bukkit.event.entity.EntityDamageEvent
 
-class ArmorReduction(priority: DamagePriority) : DamageModifier("armor_reduction", priority) {
+class ArmorOverride(priority: DamagePriority) : DamageModifier(
+    "armor_override", priority,
+    ignoreIfTrueDamage = true
+) {
     override fun modify(event: EntityDamageEvent, flag: DamageFlag) {
-        if (flag.isTrueDamage) return
-
         val entity = event.entity as? Attributable ?: return
         val armor = entity.getAttributeValueOrZero(Attribute.GENERIC_ARMOR)
         val toughness = entity.getAttributeValueOrZero(Attribute.GENERIC_ARMOR_TOUGHNESS)

@@ -14,7 +14,8 @@ import org.bukkit.event.entity.EntityDamageEvent
 abstract class DamageModifier(
     val name: String,
     val priority: DamagePriority,
-    val ignoreCancelled: Boolean = false
+    val ignoreCancelled: Boolean = true,
+    val ignoreIfTrueDamage: Boolean = false
 ) {
     init {
         require(name.isNotEmpty()) { "Name of Damage Modifier cannot be empty." }

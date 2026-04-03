@@ -4,10 +4,7 @@ import com.akira.core.api.EnhancedManager
 import com.akira.survivalalpha.SurvivalAlpha
 import com.akira.survivalalpha.service.damage.DamageManager.applyModifiers
 import com.akira.survivalalpha.service.damage.DamageManager.sorted
-import com.akira.survivalalpha.service.damage.modifier.ArmorReduction
-import com.akira.survivalalpha.service.damage.modifier.DistanceScaling
-import com.akira.survivalalpha.service.damage.modifier.NetherAmplifier
-import com.akira.survivalalpha.service.damage.modifier.ShieldNerf
+import com.akira.survivalalpha.service.damage.modifier.*
 import org.bukkit.event.entity.EntityDamageEvent
 
 /**
@@ -34,6 +31,7 @@ object DamageManager : EnhancedManager<DamageModifier>() {
 
         sorted.forEach { modifier ->
             if (event.isCancelled && modifier.ignoreCancelled) return@forEach
+            if (flag.isTrueDamage && modifier.ignoreIfTrueDamage) return@forEach
 
             runCatching { modifier.modify(event, flag) }
                 .onFailure { throwable ->
@@ -48,10 +46,11 @@ object DamageManager : EnhancedManager<DamageModifier>() {
      * 注册所有伤害修饰符。
      */
     fun setupModifiers() {
+        register(WeaponOverride(DamagePriority.PRE_PROCESS))
         register(DistanceScaling(DamagePriority.ADD_HIGH))
         register(NetherAmplifier(DamagePriority.ADD_LOW))
         register(ShieldNerf(DamagePriority.HIGHEST))
-        register(ArmorReduction(DamagePriority.HIGHEST))
+        register(ArmorOverride(DamagePriority.HIGHEST))
     }
 
     override fun register(element: DamageModifier) {
