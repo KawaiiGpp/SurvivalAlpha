@@ -18,6 +18,7 @@ class SurvivalAlpha : AkiraPlugin() {
     }
 
     val configManager = ConfigManager()
+    val configDamageModifier get() = configManager.get("damage_modifier") as DamageModifierConfig
 
     override fun onEnable() {
         super.onEnable()

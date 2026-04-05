@@ -20,7 +20,7 @@ class ArmorOverride(priority: DamagePriority) : DamageModifier(
     "armor_override", priority,
     ignoreIfTrueDamage = true
 ) {
-    private val armorReductionCap = 0.5
+    private val armorReductionCap = this.getDouble("armor_reduction_cap")
 
     override fun modify(event: EntityDamageEvent, flag: DamageFlag) {
         val entity = event.entity as? Attributable ?: return

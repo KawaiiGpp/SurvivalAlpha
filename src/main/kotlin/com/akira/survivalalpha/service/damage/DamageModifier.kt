@@ -1,5 +1,6 @@
 package com.akira.survivalalpha.service.damage
 
+import com.akira.survivalalpha.SurvivalAlpha
 import org.bukkit.event.entity.EntityDamageEvent
 
 /**
@@ -18,8 +19,20 @@ abstract class DamageModifier(
     val ignoreCancelled: Boolean = true,
     val ignoreIfTrueDamage: Boolean = false
 ) {
+    private val config get() = SurvivalAlpha.instance.configDamageModifier.getSection(this)
+
     init {
-        require(name.isNotEmpty()) { "Name of Damage Modifier cannot be empty." }
+        require(name.isNotEmpty()) { "Name of damage modifier cannot be empty." }
+    }
+
+    protected fun getInt(key: String): Int {
+        if (config.contains(key)) return config.getInt(key)
+        throw NullPointerException("Int value ($key) for $name not found.")
+    }
+
+    protected fun getDouble(key: String): Double {
+        if (config.contains(key)) return config.getDouble(key)
+        throw NullPointerException("Double value ($key) for $name not found.")
     }
 
     /**

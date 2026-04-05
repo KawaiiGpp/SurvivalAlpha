@@ -26,9 +26,9 @@ import kotlin.math.roundToInt
  * @property damageAfterBlockingMultiplier 盾牌格挡后剩余的伤害比例
  */
 class ShieldNerf(priority: DamagePriority) : DamageModifier("shield_nerf", priority) {
-    private val defaultDamageMultiplier = 2.0
-    private val axeDamageMultiplier = 5.0
-    private val damageAfterBlockingMultiplier = 0.5
+    private val defaultDamageMultiplier = this.getDouble("default_damage_multiplier")
+    private val axeDamageMultiplier = this.getDouble("axe_damage_multiplier")
+    private val damageAfterBlockingMultiplier = this.getDouble("damage_after_blocking_multiplier")
 
     override fun modify(event: EntityDamageEvent, flag: DamageFlag) {
         if (event !is EntityDamageByEntityEvent) return

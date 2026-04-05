@@ -19,7 +19,7 @@ import org.bukkit.event.entity.EntityDamageEvent
  * @property cooldownThreshold 冷却低于此值，攻击无效
  */
 class WeaponOverride(priority: DamagePriority) : DamageModifier("weapon_override", priority) {
-    private val cooldownThreshold = 0.5
+    private val cooldownThreshold = this.getDouble("cooldown_threshold")
 
     override fun modify(event: EntityDamageEvent, flag: DamageFlag) {
         if (event !is EntityDamageByEntityEvent) return
