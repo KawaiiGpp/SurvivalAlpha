@@ -15,7 +15,7 @@ import com.akira.survivalalpha.service.damage.DamageModifier
 class DamageModifierConfig(plugin: SurvivalAlpha, templatePath: String) :
     ConfigFile("damage_modifier", plugin, templatePath) {
     /**
-     * 获取修饰符的专属配置节点
+     * 获取修饰符的专属配置节点。
      *
      * @param modifier 修饰符实例
      * @return 修饰符专属节点

@@ -53,11 +53,11 @@ object DamageManager : EnhancedManager<DamageModifier>() {
         register(ArmorOverride(DamagePriority.HIGHEST))
     }
 
-    override fun register(element: DamageModifier) {
-        super.register(element)
-
+    override fun register(element: DamageModifier): String {
         sorted.add(element)
         sorted.sortBy { it.priority }
+
+        return super.register(element)
     }
 
     override fun unregister(key: String) {
