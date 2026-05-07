@@ -9,7 +9,7 @@ class PlayerDefaultSettingHandler : Listener {
     fun onJoin(event: PlayerJoinEvent) {
         val player = event.player
 
-        player.shieldBlockingDelay = Int.MAX_VALUE
+        player.shieldBlockingDelay = Int.MAX_VALUE // 禁用原版格挡，使新盾牌格挡机制生效
         player.healthScale = 20.0
     }
 }

@@ -10,6 +10,6 @@ class DamageListener : Listener {
     @EventHandler
     fun onDamage(event: EntityDamageEvent) {
         DamageManager.applyModifiers(event)
-        event.bypassVanillaModifiers()
+        event.bypassVanillaModifiers() // 无效化原版的减伤逻辑
     }
 }

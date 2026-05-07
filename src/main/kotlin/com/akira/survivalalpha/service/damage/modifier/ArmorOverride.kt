@@ -3,38 +3,39 @@ package com.akira.survivalalpha.service.damage.modifier
 import com.akira.survivalalpha.service.damage.DamageFlag
 import com.akira.survivalalpha.service.damage.DamageModifier
 import com.akira.survivalalpha.service.damage.DamagePriority
-import com.akira.survivalalpha.util.recalculatedValue
+import com.akira.survivalalpha.util.uncappedValue
 import org.bukkit.attribute.Attributable
 import org.bukkit.attribute.Attribute
 import org.bukkit.event.entity.EntityDamageEvent
 
 /**
- * 盔甲减伤修饰符
+ * 盔甲减伤
  *
- * 覆写原版的盔甲防御逻辑。
- * 当玩家受到真伤攻击时忽略。
- *
- * @property armorReductionCap 护甲值的减伤上限，需大于0小于1
+ * - 覆写原版的盔甲减伤逻辑
+ * - 采用 `n / (n + const)` 非线性减伤公式
+ * - 伤害减免由盔甲值与韧性值共同决定
  */
 class ArmorOverride(priority: DamagePriority) : DamageModifier(
-    "armor_override", priority,
+    "armor_override",
+    priority,
     ignoreIfTrueDamage = true
 ) {
-    private val armorReductionCap = this.getDouble("armor_reduction_cap")
+    private val armorReductionWeight = this.getDouble("armor_reduction_weight") { it >= 0 && it <= 1 }
+    private val toughnessReductionWeight get() = 1 - armorReductionWeight
 
     override fun modify(event: EntityDamageEvent, flag: DamageFlag) {
         val entity = event.entity as? Attributable ?: return
+
         val armor = entity.getAttributeValueOrZero(Attribute.GENERIC_ARMOR)
         val toughness = entity.getAttributeValueOrZero(Attribute.GENERIC_ARMOR_TOUGHNESS)
-        val toughnessReductionCap = 1 - armorReductionCap
 
-        val armorReduction = armor / 30 * armorReductionCap
-        val toughnessReduction = toughness / (toughness + 20) * toughnessReductionCap
+        val armorReduction = armor / (armor + 20) * armorReductionWeight
+        val toughnessReduction = toughness / (toughness + 20) * toughnessReductionWeight
 
         event.damage *= 1 - (armorReduction + toughnessReduction)
     }
 
     private fun Attributable.getAttributeValueOrZero(attribute: Attribute): Double {
-        return this.getAttribute(attribute)?.recalculatedValue ?: 0.0
+        return this.getAttribute(attribute)?.uncappedValue ?: 0.0
     }
 }

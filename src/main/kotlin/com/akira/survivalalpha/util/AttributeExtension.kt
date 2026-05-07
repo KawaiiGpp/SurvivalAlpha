@@ -1,16 +1,20 @@
 package com.akira.survivalalpha.util
 
+import com.akira.core.api.util.item.ItemAttributeEditor
+import com.akira.survivalalpha.SurvivalAlpha
+import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeInstance
 import org.bukkit.attribute.AttributeModifier.Operation
+import org.bukkit.enchantments.Enchantment
+import org.bukkit.inventory.ItemStack
 import kotlin.math.max
 
 /**
- * 根据属性实例的基础值和修饰符重新计算出的属性值。
+ * 根据基础值和修饰符重新计算出的属性值
  *
- * 在原版，属性最终值 [AttributeInstance.value] 的上限受到限制，
- * 通过此属性可还原出限制前的原始属性值。
+ * - 可绕过原版根据属性类型施加的上限
  */
-val AttributeInstance.recalculatedValue: Double
+val AttributeInstance.uncappedValue: Double
     get() {
         val modifiers = this.modifiers.asSequence()
 
@@ -28,3 +32,19 @@ val AttributeInstance.recalculatedValue: Double
 
         return max(multiplication, 0.0)
     }
+
+fun ItemStack.transformEnchants() {
+    val enchantments: Map<Enchantment, Int> = this.enchantments
+    if (enchantments.isEmpty()) return
+
+    enchantments[Enchantment.SHARPNESS]?.let {
+        if (!this.hasItemMeta()) return
+
+        val attribute = Attribute.GENERIC_ATTACK_DAMAGE
+        val plugin = SurvivalAlpha.instance
+        val editor = ItemAttributeEditor(this, attribute, plugin)
+
+        editor.set("enchant_sharpness", it * 0.05, Operation.ADD_SCALAR)
+        editor.apply(this)
+    }
+}

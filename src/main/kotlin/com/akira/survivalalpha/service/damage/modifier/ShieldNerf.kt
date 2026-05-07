@@ -14,21 +14,17 @@ import org.bukkit.event.entity.EntityDamageEvent
 import kotlin.math.roundToInt
 
 /**
- * 盾牌削弱修饰符
+ * 盾牌削弱
+ * - 盾牌特性改为格挡部分攻击伤害
+ * - 根据伤害扣除盾牌耐久。若武器为斧头，耐久扣除大幅增加
  *
- * 盾牌只能格挡一部分攻击伤害，并根据伤害扣除耐久度。
- * 当攻击者手持斧头，耐久度的扣除将大幅增加。
- *
- * 为禁用原版格挡，需设 [Player.shieldBlockingDelay] 为 [Int.MAX_VALUE]
- *
- * @property defaultDamageMultiplier 普通攻击扣除的耐久度倍数
- * @property axeDamageMultiplier 斧头攻击扣除的耐久度倍数
- * @property damageAfterBlockingMultiplier 盾牌格挡后剩余的伤害比例
+ * 需禁用原版格挡行为以避免冲突：
+ * - 设 [Player.shieldBlockingDelay] 为 [Int.MAX_VALUE]
  */
 class ShieldNerf(priority: DamagePriority) : DamageModifier("shield_nerf", priority) {
-    private val defaultDamageMultiplier = this.getDouble("default_damage_multiplier")
-    private val axeDamageMultiplier = this.getDouble("axe_damage_multiplier")
-    private val damageAfterBlockingMultiplier = this.getDouble("damage_after_blocking_multiplier")
+    private val defaultDamageMultiplier = this.getDouble("default_damage_multiplier") { it > 0 }
+    private val axeDamageMultiplier = this.getDouble("axe_damage_multiplier") { it > 0 }
+    private val damageAfterBlockingMultiplier = this.getDouble("damage_after_blocking_multiplier") { it >= 0 }
 
     override fun modify(event: EntityDamageEvent, flag: DamageFlag) {
         if (event !is EntityDamageByEntityEvent) return

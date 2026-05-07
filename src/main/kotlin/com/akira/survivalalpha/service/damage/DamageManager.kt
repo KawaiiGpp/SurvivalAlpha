@@ -1,9 +1,7 @@
 package com.akira.survivalalpha.service.damage
 
-import com.akira.core.api.EnhancedManager
+import com.akira.core.api.Manager
 import com.akira.survivalalpha.SurvivalAlpha
-import com.akira.survivalalpha.service.damage.DamageManager.applyModifiers
-import com.akira.survivalalpha.service.damage.DamageManager.sorted
 import com.akira.survivalalpha.service.damage.modifier.ArmorOverride
 import com.akira.survivalalpha.service.damage.modifier.ShieldNerf
 import com.akira.survivalalpha.service.damage.modifier.WeaponOverride
@@ -12,20 +10,14 @@ import org.bukkit.event.entity.EntityDamageEvent
 /**
  * 伤害修饰符管理器
  *
- * 内部维护一个伤害修饰符的集合。
- *
- * 当监听到 [EntityDamageEvent] 将调用 [applyModifiers] 方法，
- * 根据修饰符的优先级依次对事件实例进行作用。
- *
- * 私有属性 [sorted] 用于缓存已排序的修饰符。
+ * - 存储已注册的修饰符
+ * - 封装对实体伤害事件应用修饰符的逻辑
  */
-object DamageManager : EnhancedManager<DamageModifier>() {
+object DamageManager : Manager<DamageModifier>() {
     private val sorted = mutableListOf<DamageModifier>()
 
     /**
-     * 对接收到的事件实例进行修饰。
-     *
-     * @param event 事件实例
+     * 将已注册的修饰符依次应用至事件实例。
      */
     fun applyModifiers(event: EntityDamageEvent) {
         val plugin = SurvivalAlpha.instance
@@ -45,7 +37,7 @@ object DamageManager : EnhancedManager<DamageModifier>() {
     }
 
     /**
-     * 注册所有伤害修饰符。
+     * 注册伤害修饰符，由开发者手动新增。
      */
     fun setupModifiers() {
         register(WeaponOverride(DamagePriority.PRE_PROCESS))

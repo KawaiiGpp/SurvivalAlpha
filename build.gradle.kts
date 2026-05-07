@@ -47,7 +47,7 @@ tasks.register<Copy>("deployPlugin") {
     rename { "${project.name}.jar" }
 }
 
-tasks.build { dependsOn("deployPlugin") }
+tasks.named("build") { dependsOn("deployPlugin") }
 
 tasks.withType<ProcessResources> {
     inputs.property("checkVersion", project.version)

@@ -1,17 +1,19 @@
 package com.akira.survivalalpha.service.damage
 
+import com.akira.core.api.util.general.ensure
+import com.akira.core.api.util.general.noSuchElm
 import com.akira.survivalalpha.SurvivalAlpha
 import org.bukkit.event.entity.EntityDamageEvent
 
 /**
  * 伤害修饰符
  *
- * 明确对于监听到的 [EntityDamageEvent] 的修饰行为。
+ * - 覆写 [modify] 以定义对事件实例的修饰行为
  *
- * @property name 修饰符名称，不可为空。不可重复，否则有覆盖风险
- * @property priority 修饰符应用的优先级
- * @property ignoreCancelled 如果事件实例标记为已取消，则不应用修饰符
- * @property ignoreIfTrueDamage 如果事件标记为真实伤害，则不应用修饰符
+ * @property name 名称，也是唯一标识符
+ * @property priority 优先级
+ * @property ignoreCancelled 若事件取消则忽略
+ * @property ignoreIfTrueDamage 若为真伤则忽略
  */
 abstract class DamageModifier(
     val name: String,
@@ -25,24 +27,28 @@ abstract class DamageModifier(
         require(name.isNotEmpty()) { "Name of damage modifier cannot be empty." }
     }
 
-    protected fun getInt(key: String): Int {
-        if (config.contains(key)) return config.getInt(key)
-        throw NullPointerException("Int value ($key) for $name not found.")
+    protected fun getInt(key: String, check: ((Int) -> Boolean)? = null): Int {
+        if (!config.contains(key)) noSuchElm("Int value '$key' for '$name' not found.")
+
+        val result = config.getInt(key)
+        if (check != null) result.ensure(check) { "Int value '$key' for '$name' is invalid: $it" }
+
+        return result
     }
 
-    protected fun getDouble(key: String): Double {
-        if (config.contains(key)) return config.getDouble(key)
-        throw NullPointerException("Double value ($key) for $name not found.")
+    protected fun getDouble(key: String, check: ((Double) -> Boolean)? = null): Double {
+        if (!config.contains(key)) noSuchElm("Double value '$key' for '$name' not found.")
+
+        val result = config.getDouble(key)
+        if (check != null) result.ensure(check) { "Double value '$key' for '$name' is invalid: $it" }
+
+        return result
     }
 
     /**
      * 定义对事件的修饰行为。
      *
-     * 由 [DamageManager.applyModifiers] 统一调度，
-     * 无需另外手动调用该方法。
-     *
-     * @param event 事件实例
-     * @param flag 伤害事件标记，用于记录额外信息
+     * - 由 [DamageManager.applyModifiers] 统一调度
      */
     abstract fun modify(event: EntityDamageEvent, flag: DamageFlag)
 }
