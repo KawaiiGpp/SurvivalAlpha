@@ -1,5 +1,6 @@
 armor_override:
-  armor_reduction_weight: 0.5
+  armor_reduction_weight: 0.75
+  reduction_threshold: 20
 
 shield_nerf:
   default_damage_multiplier: 2.0

@@ -1,12 +1,7 @@
 package com.akira.survivalalpha.util
 
-import com.akira.core.api.util.item.ItemAttributeEditor
-import com.akira.survivalalpha.SurvivalAlpha
-import org.bukkit.attribute.Attribute
 import org.bukkit.attribute.AttributeInstance
 import org.bukkit.attribute.AttributeModifier.Operation
-import org.bukkit.enchantments.Enchantment
-import org.bukkit.inventory.ItemStack
 import kotlin.math.max
 
 /**
@@ -32,19 +27,3 @@ val AttributeInstance.uncappedValue: Double
 
         return max(multiplication, 0.0)
     }
-
-fun ItemStack.transformEnchants() {
-    val enchantments: Map<Enchantment, Int> = this.enchantments
-    if (enchantments.isEmpty()) return
-
-    enchantments[Enchantment.SHARPNESS]?.let {
-        if (!this.hasItemMeta()) return
-
-        val attribute = Attribute.GENERIC_ATTACK_DAMAGE
-        val plugin = SurvivalAlpha.instance
-        val editor = ItemAttributeEditor(this, attribute, plugin)
-
-        editor.set("enchant_sharpness", it * 0.05, Operation.ADD_SCALAR)
-        editor.apply(this)
-    }
-}

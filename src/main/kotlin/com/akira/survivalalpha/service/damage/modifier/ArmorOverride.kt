@@ -21,7 +21,8 @@ class ArmorOverride(priority: DamagePriority) : DamageModifier(
     ignoreIfTrueDamage = true
 ) {
     private val armorReductionWeight = this.getDouble("armor_reduction_weight") { it >= 0 && it <= 1 }
-    private val toughnessReductionWeight get() = 1 - armorReductionWeight
+    private val reductionThreshold = this.getInt("reduction_threshold") { it > 0 }
+    private val toughnessReductionWeight = 1 - armorReductionWeight
 
     override fun modify(event: EntityDamageEvent, flag: DamageFlag) {
         val entity = event.entity as? Attributable ?: return
@@ -29,8 +30,8 @@ class ArmorOverride(priority: DamagePriority) : DamageModifier(
         val armor = entity.getAttributeValueOrZero(Attribute.GENERIC_ARMOR)
         val toughness = entity.getAttributeValueOrZero(Attribute.GENERIC_ARMOR_TOUGHNESS)
 
-        val armorReduction = armor / (armor + 20) * armorReductionWeight
-        val toughnessReduction = toughness / (toughness + 20) * toughnessReductionWeight
+        val armorReduction = armor / (armor + reductionThreshold) * armorReductionWeight
+        val toughnessReduction = toughness / (toughness + reductionThreshold) * toughnessReductionWeight
 
         event.damage *= 1 - (armorReduction + toughnessReduction)
     }
