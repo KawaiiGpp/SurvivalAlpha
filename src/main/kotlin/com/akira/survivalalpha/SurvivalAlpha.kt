@@ -3,6 +3,7 @@ package com.akira.survivalalpha
 import com.akira.core.api.AkiraPlugin
 import com.akira.core.api.config.ConfigManager
 import com.akira.survivalalpha.config.DamageModifierConfig
+import com.akira.survivalalpha.item.transform.TransformerManager
 import com.akira.survivalalpha.listener.DamageListener
 import com.akira.survivalalpha.listener.PlayerDefaultSettingHandler
 import com.akira.survivalalpha.service.damage.DamageManager
@@ -27,6 +28,7 @@ class SurvivalAlpha : AkiraPlugin() {
         configManager.register(DamageModifierConfig(this, templatePath))
         configManager.initializeAll()
 
+        TransformerManager.setupTransformers()
         DamageManager.setupModifiers()
 
         setupListener(DamageListener())
