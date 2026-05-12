@@ -1,6 +1,6 @@
 package com.akira.survivalalpha.listener
 
-import com.akira.survivalalpha.item.transform.TransformerManager
+import com.akira.survivalalpha.attribute.transform.TransformerManager
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent

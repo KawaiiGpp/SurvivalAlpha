@@ -1,4 +1,4 @@
-package com.akira.survivalalpha.item.transform
+package com.akira.survivalalpha.attribute.transform
 
 import com.akira.core.api.Registry
 import org.bukkit.attribute.Attribute
