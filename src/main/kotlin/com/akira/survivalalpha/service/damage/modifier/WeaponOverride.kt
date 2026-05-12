@@ -9,6 +9,7 @@ import org.bukkit.attribute.Attribute
 import org.bukkit.entity.Player
 import org.bukkit.event.entity.EntityDamageByEntityEvent
 import org.bukkit.event.entity.EntityDamageEvent
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause
 
 /**
  * 武器伤害计算
@@ -21,6 +22,9 @@ class WeaponOverride(priority: DamagePriority) : DamageModifier("weapon_override
 
     override fun modify(event: EntityDamageEvent, flag: DamageFlag) {
         if (event !is EntityDamageByEntityEvent) return
+
+        val cause = event.cause
+        if (cause != DamageCause.ENTITY_ATTACK && cause != DamageCause.ENTITY_SWEEP_ATTACK) return
 
         val entity = event.damager as? Attributable ?: return
         val damage = entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)?.uncappedValue ?: return
