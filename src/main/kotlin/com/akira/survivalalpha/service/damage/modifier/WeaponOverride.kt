@@ -1,5 +1,6 @@
 package com.akira.survivalalpha.service.damage.modifier
 
+import com.akira.survivalalpha.attribute.temp.TempModifierManager
 import com.akira.survivalalpha.service.damage.DamageFlag
 import com.akira.survivalalpha.service.damage.DamageModifier
 import com.akira.survivalalpha.service.damage.DamagePriority
@@ -27,9 +28,13 @@ class WeaponOverride(priority: DamagePriority) : DamageModifier("weapon_override
         if (cause != DamageCause.ENTITY_ATTACK && cause != DamageCause.ENTITY_SWEEP_ATTACK) return
 
         val entity = event.damager as? Attributable ?: return
-        val damage = entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)?.uncappedValue ?: return
-        val cooldown = (entity as? Player)?.attackCooldown ?: 1.0F
+        val tempModifierSession = TempModifierManager.createSessionFor(entity, event)
 
+        tempModifierSession.applyToTarget()
+        val damage = entity.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE)?.uncappedValue ?: 0.0
+        tempModifierSession.removeFromTarget()
+
+        val cooldown = (entity as? Player)?.attackCooldown ?: 1.0F
         if (cooldown >= cooldownThreshold) event.damage = damage * cooldown
         else event.isCancelled = true
     }
