@@ -1,6 +1,6 @@
 package com.akira.survivalalpha.listener
 
-import com.akira.survivalalpha.attribute.transform.TransformerManager
+import com.akira.survivalalpha.attribute.item.ItemTransform
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent
@@ -17,6 +17,6 @@ class PlayerDefaultSettingHandler : Listener {
 
     @EventHandler
     fun onPickup(event: PlayerAttemptPickupItemEvent) {
-        TransformerManager.transform(event.item.itemStack) // debug only: transforming items
+        ItemTransform.transform(event.item.itemStack) // debug only: transforming items
     }
 }
