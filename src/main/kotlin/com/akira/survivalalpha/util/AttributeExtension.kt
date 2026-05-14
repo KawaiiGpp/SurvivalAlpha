@@ -1,7 +1,9 @@
 package com.akira.survivalalpha.util
 
 import org.bukkit.attribute.AttributeInstance
+import org.bukkit.attribute.AttributeModifier
 import org.bukkit.attribute.AttributeModifier.Operation
+import org.bukkit.inventory.EquipmentSlotGroup
 import kotlin.math.max
 
 /**
@@ -27,3 +29,18 @@ val AttributeInstance.uncappedValue: Double
 
         return max(multiplication, 0.0)
     }
+
+/**
+ * 判断该修饰符是否除 `UUID` 外的内容均相同。
+ */
+fun AttributeModifier.matches(
+    name: String,
+    amount: Double,
+    operation: Operation,
+    slotGroup: EquipmentSlotGroup
+): Boolean {
+    return this.name == name
+            && this.amount == amount
+            && this.operation == operation
+            && this.slotGroup == slotGroup
+}

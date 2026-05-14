@@ -8,19 +8,21 @@ import org.bukkit.inventory.meta.ItemMeta
 
 class EnchantModifierTransform(val formula: TransformableEnchant) : ItemModifierTransform {
     override fun apply(material: Material, meta: ItemMeta) {
-        val attribute = formula.attribute
         val enchant = formula.enchant
         val name = "Enchant modifier ${enchant.key}"
+        val attribute = formula.attribute
+        val level = meta.enchants[enchant]
 
-        meta.removeAttributeModifier(attribute, name)
-        meta.enchants[enchant]?.let { level ->
-            meta.addAttributeModifier(
+        if (level != null) {
+            meta.setAttributeModifier(
                 attribute,
                 name,
                 level * formula.multiplier,
                 Operation.ADD_SCALAR,
                 material.equipmentSlot.group
             )
+        } else {
+            meta.removeAttributeModifier(attribute, name)
         }
     }
 }
