@@ -2,6 +2,7 @@ package com.akira.survivalalpha.service.damage
 
 import com.akira.core.api.Manager
 import com.akira.survivalalpha.SurvivalAlpha
+import com.akira.survivalalpha.attribute.combat.DynamicModifierGenerator
 import com.akira.survivalalpha.service.damage.modifier.ArmorOverride
 import com.akira.survivalalpha.service.damage.modifier.ShieldNerf
 import com.akira.survivalalpha.service.damage.modifier.WeaponOverride
@@ -23,16 +24,23 @@ object DamageManager : Manager<DamageModifier>() {
         val plugin = SurvivalAlpha.instance
         val flag = DamageFlag()
 
-        sorted.forEach { modifier ->
-            if (event.isCancelled && modifier.ignoreCancelled) return@forEach
-            if (flag.isTrueDamage && modifier.ignoreIfTrueDamage) return@forEach
+        val session = DynamicModifierGenerator.createSession(event)
+        session?.applyDynamicModifiers() // 若 event.entity 不为 LivingEntity 实例则跳过
 
-            runCatching { modifier.modify(event, flag) }
-                .onFailure { throwable ->
-                    plugin.logError("处理伤害修饰符 ${modifier.name} 发生异常。")
-                    plugin.logError("该修饰符的优先级属于：${modifier.priority.name}")
-                    throwable.printStackTrace()
-                }
+        try {
+            sorted.forEach { modifier ->
+                if (event.isCancelled && modifier.ignoreCancelled) return@forEach
+                if (flag.isTrueDamage && modifier.ignoreIfTrueDamage) return@forEach
+
+                runCatching { modifier.modify(event, flag) }
+                    .onFailure { throwable ->
+                        plugin.logError("处理伤害修饰符 ${modifier.name} 发生异常。")
+                        plugin.logError("该修饰符的优先级属于：${modifier.priority.name}")
+                        throwable.printStackTrace()
+                    }
+            }
+        } finally {
+            session?.removeDynamicModifiers()
         }
     }
 

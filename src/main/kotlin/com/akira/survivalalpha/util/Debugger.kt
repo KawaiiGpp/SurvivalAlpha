@@ -3,9 +3,15 @@ package com.akira.survivalalpha.util
 import com.akira.core.api.util.text.debug
 import org.bukkit.attribute.Attributable
 import org.bukkit.attribute.Attribute
+import org.bukkit.entity.Entity
 
 object Debugger {
-    fun attributeModifiers(target: Attributable, attribute: Attribute) {
+    fun attributeModifiers(target: Entity?, attribute: Attribute) {
+        if (target !is Attributable) {
+            debug("Target is not attributable.")
+            return
+        }
+
         val instance = target.getAttribute(attribute)
 
         if (instance == null) {
